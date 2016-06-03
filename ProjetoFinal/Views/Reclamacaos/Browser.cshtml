@@ -1,0 +1,27 @@
+﻿@model ProjetoFinal.Models.Reclamacao
+<div>
+    <h4>Comentários</h4>
+    <hr />
+</div>
+<div>
+    <ul id="album-list">
+        @foreach (var item in Model.Comentarios)
+        {
+            <div id="comentP" style="margin-bottom:20px;">
+                <dd style="border:1px solid #ccc; padding: 5px;border-radius:5px; min-height: 50px; max-width:400px;">
+                    @Html.DisplayFor(i => item.Descricao, new { ComentarioID = item.ComentarioID })
+                    @if (item.ImageFile != null && item.ImageMimeType != null)
+                    {<img width="75" height="50" src="@Url.Action("GetImage", "Comentarios", new { id = item.ComentarioID })" />}
+                </dd>
+                <dd>@Html.DisplayFor(i => item.Data, new { ComentarioID = item.ComentarioID })</dd>
+                
+                @*<dd>
+                @if (item.ImageFile != null && item.ImageMimeType!= null)
+                {<img width="75" height="25" src="@Url.Action("GetImage", "Comentarios", new { id = item.ComentarioID })" />}
+                </dd>*@
+            </div>
+        }
+    </ul>
+</div>
+
+

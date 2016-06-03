@@ -1,0 +1,72 @@
+﻿@model ProjetoFinal.Models.Reclamacao
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4></h4>
+    <hr />
+    
+    <dl class="dl-horizontal">
+        
+        <dt>    
+            Categoria:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Categoria.Titulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Titulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Titulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataRequisicao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataRequisicao);
+        </dd>
+    </dl>
+    <table>
+        <td><img width="250" height="150" src="@Url.Action("GetImage", "Reclamacaos", new { id = Model.ReclamacaoID })" /></td>
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ReclamacaoID }) |
+    @Html.ActionLink("Voltar", "Index")
+</p>
+<div>
+    
+    @{
+        Html.RenderPartial("Browser");
+    }
+        
+</div>
+<p>
+    @Html.ActionLink("Novo comentário", "Create", "Comentarios", new { id = Model.ReclamacaoID },null)
+</p>

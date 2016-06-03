@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ProjetoFinal.Models.Reclamacao>
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Index</h2>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+   @using (Html.BeginForm())
+   {
+  
+            <table id="tabelalegal">
+                <tr>
+                    <th>Find by name:</th>
+                    <td>@Html.TextBox("SearchString", null, new { @class = "form-control" })</td>
+                    <th>Select Categoria:</th><td>@Html.DropDownList("SelectedCategoria", null, "All", new { @class = "form-control" })</td> 
+                    <td><input type="submit" value="Search" class="btn btn-default" /></td>
+                </tr>
+            </table>
+   }
+@foreach (var item in Model)
+{
+    
+    <table class="tableind">
+  
+    <img class="imgtb" src="@Url.Action("GetImage", "Reclamacaos", new { id = item.ReclamacaoID  })" />
+
+        <tr>
+            <th>
+                Categoria:
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria.Titulo)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Título:
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Descrição:
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Status:
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+       </tr>
+       <tr>
+            <th>
+                Data de Requisição:
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataRequisicao)
+            </td>
+        </tr>
+        @*<td>
+                @Html.DisplayFor(modelItem => item.ImageFile)
+            </td>*@
+        <tr> 
+            <td style="margin:20px;">
+                @Html.ActionLink("Edit", "Edit", new { id = item.ReclamacaoID }) |
+                @Html.ActionLink("Detalhes/Comentários", "Details", new { id = item.ReclamacaoID }, new{@class = "label label-info"}) |
+                @Html.ActionLink(" Delete", "Delete", new { id = item.ReclamacaoID })
+            </td>
+        </tr>
+
+    </table>
+}
