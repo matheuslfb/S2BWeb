@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ProjetoFinal.ViewModels.GenreRecInfo>
+
+@{
+    ViewBag.Title = "ConsultaBairro";
+}
+
+<h2>ConsultaBairro</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.count)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.count)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.name }) |
+            @Html.ActionLink("Details", "Details", new { id=item.name }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.name })
+        </td>
+    </tr>
+}
+
+</table>

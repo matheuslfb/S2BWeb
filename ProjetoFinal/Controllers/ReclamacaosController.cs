@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -7,6 +6,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProjetoFinal.Models;
+using ProjetoFinal.ViewModels;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using ProjetoFinal.Migrations;
+
 
 namespace ProjetoFinal.Controllers
 {
@@ -27,7 +31,8 @@ namespace ProjetoFinal.Controllers
             int catID = SelectedCategoria.GetValueOrDefault();
             var rec = db.Reclamacoes.Where(c => !SelectedCategoria.HasValue || c.CategoriaID == catID);
             //var rec = from Reclamacao in db.Reclamacoes select Reclamacao;
-            if (!String.IsNullOrEmpty(searchString)) {
+            if (!String.IsNullOrEmpty(searchString))
+            {
                 rec = rec.Where(s => s.Titulo.Contains(searchString));
             }
             return View(rec.ToList());
@@ -72,7 +77,7 @@ namespace ProjetoFinal.Controllers
             }
             if (ModelState.IsValid)
             {
-                
+
                 db.Reclamacoes.Add(reclamacao);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -83,19 +88,27 @@ namespace ProjetoFinal.Controllers
         }
 
         // GET: Reclamacaos/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize (Users = User.Identity.Name.ToString(), Roles ="Admin")]
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var userManager = new UserManager<ApplicationUser>(store);
+            ApplicationUser user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            Reclamacao reclamacao = db.Reclamacoes.Find(id);
+
+            if (User.Identity.Name.ToString() == reclamacao.Usuario || user.Tipo == TipoUsuario.adm)
+            {
+                if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Reclamacao reclamacao = db.Reclamacoes.Find(id);
+            
             if (reclamacao == null)
             {
                 return HttpNotFound();
             }
             ViewBag.CategoriaID = new SelectList(db.Categorias, "CategoriaID", "Titulo", reclamacao.CategoriaID);
+            }
             return View(reclamacao);
         }
 
@@ -104,8 +117,8 @@ namespace ProjetoFinal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public ActionResult Edit(int ReclamacaoID,string Titulo,string Descricao,string Status,DateTime DataRequisicao,int CategoriaID,HttpPostedFileBase image)
+
+        public ActionResult Edit(int ReclamacaoID, string Titulo, string Descricao, Status Status, DateTime DataRequisicao, int CategoriaID, HttpPostedFileBase image)
         {
             var rec = db.Reclamacoes.Find(ReclamacaoID);
             if (ModelState.IsValid)
@@ -115,17 +128,17 @@ namespace ProjetoFinal.Controllers
                 rec.Status = Status;
                 rec.DataRequisicao = DataRequisicao;
                 rec.CategoriaID = CategoriaID;
-                if (image != null||rec.ImageFile!=null||rec.ImageMimeType!=null)
+                if (image != null || rec.ImageFile != null || rec.ImageMimeType != null)
                 {
                     rec.ImageMimeType = image.ContentType;
                     rec.ImageFile = new byte[image.ContentLength];
                     image.InputStream.Read(rec.ImageFile, 0, image.ContentLength);
                 }
-                
+
                 db.Entry(rec).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }   
+            }
             ViewBag.CategoriaID = new SelectList(db.Categorias, "CategoriaID", "Titulo", rec.CategoriaID);
             return View(rec);
         }
@@ -134,7 +147,7 @@ namespace ProjetoFinal.Controllers
         [Authorize(Users = "adm@s2b.pucrs.br, smov@s2b.pucrs.br,  sman@s2b.pucrs.br")]
         public ActionResult Delete(int? id)
         {
-             
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -145,7 +158,7 @@ namespace ProjetoFinal.Controllers
                 return HttpNotFound();
             }
             return View(reclamacao);
-            
+
         }
 
         // POST: Reclamacaos/Delete/5
@@ -156,7 +169,8 @@ namespace ProjetoFinal.Controllers
 
             Reclamacao reclamacao = db.Reclamacoes.Find(id);
             Comentario coment = db.Comentarios.Find(reclamacao.ReclamacaoID);
-            if (coment != null) { 
+            if (coment != null)
+            {
                 db.Comentarios.Remove(coment);
             }
             db.Reclamacoes.Remove(reclamacao);
@@ -180,12 +194,12 @@ namespace ProjetoFinal.Controllers
             return View(catModel);
         }
 
-        
+
 
         public ActionResult GetImage(int id)
         {
             Reclamacao rec = db.Reclamacoes.Find(id);
-            if(rec != null&& rec.ImageFile != null)
+            if (rec != null && rec.ImageFile != null)
             {
                 return File(rec.ImageFile, rec.ImageMimeType);
             }
@@ -194,7 +208,27 @@ namespace ProjetoFinal.Controllers
                 return new FilePathResult("~/Images/nao-disponivel.jpg", "image/jpeg");
             }
         }
-        
 
+        public ActionResult MinhasReclamacoes(string name)
+        {
+
+            var rec = db.Reclamacoes.Where(c => c.Usuario == name);
+            return View(rec.ToList());
+        }
+
+        public ActionResult ConsultaBairro()
+        {
+
+            var data = from rec in db.Reclamacoes
+                       group rec by rec.Categoria into dateGroup
+                       select new GenreRecInfo()
+                       {
+                           name = dateGroup.Key.Titulo,
+                           count = dateGroup.Count(),
+                       };
+            return View(data.ToList());
+
+
+        }
     }
 }

@@ -72,7 +72,7 @@
             </td>*@
         <tr> 
             <td style="margin:20px;">
-                @Html.ActionLink("Edit", "Edit", new { id = item.ReclamacaoID }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.ReclamacaoID }, new { User = User}) |
                 @Html.ActionLink("Detalhes/Comentários", "Details", new { id = item.ReclamacaoID }, new{@class = "label label-info"}) |
                 @Html.ActionLink(" Delete", "Delete", new { id = item.ReclamacaoID })
             </td>

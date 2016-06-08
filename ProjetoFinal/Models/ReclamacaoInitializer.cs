@@ -29,7 +29,8 @@ namespace ProjetoFinal.Models
                     DataRequisicao = DateTime.Parse("1989-1-11"),
                     CategoriaID =  cat.Single( e => e.Titulo == "Transporte").CategoriaID,
                   // Comentario = coment.FindAll(e => e.Descricao.Equals("legal")),
-                    Status = "Em aberto!"
+                    Status = Status.Aberta
+
                 },
                 new Reclamacao {
                     Titulo = "Teste2",
@@ -37,7 +38,7 @@ namespace ProjetoFinal.Models
                     DataRequisicao = DateTime.Parse("1989-5-12"),
                     CategoriaID =  cat.Single( e => e.Titulo == "Transporte").CategoriaID,
                   // Comentario = coment.FindAll(e => e.Descricao.Equals("legal")),
-                    Status = "Em aberto!"
+                    Status = Status.Aberta
                 },
                 new Reclamacao {
                     Titulo = "Teste1",
@@ -45,7 +46,7 @@ namespace ProjetoFinal.Models
                     DataRequisicao = DateTime.Parse("1989-5-12"),
                     CategoriaID =  cat.Single( e => e.Titulo == "Transporte").CategoriaID,
                   // Comentario = coment.FindAll(e => e.Descricao.Equals("legal")),
-                    Status = "Em aberto!"
+                    Status = Status.Aberta
                 }
             };
             rec.ForEach(s => context.Reclamacoes.Add(s));

@@ -14,5 +14,7 @@ namespace ProjetoFinal.Models
         public DbSet<Reclamacao> Reclamacoes { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Comentario> Comentarios { get; set; }
+
+        public System.Data.Entity.DbSet<ProjetoFinal.ViewModels.GenreRecInfo> GenreRecInfoes { get; set; }
     }
 }

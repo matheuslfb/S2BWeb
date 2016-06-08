@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ProjetoFinal.Models.Reclamacao>
+
+@{
+    ViewBag.Title = "MinhasReclamacoes";
+}
+
+<h2>MinhasReclamacoes</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Categoria.Titulo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Titulo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Usuario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DataRequisicao)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Usuario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataRequisicao)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ReclamacaoID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ReclamacaoID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ReclamacaoID })
+            </td>
+        </tr>
+    }
+
+</table>
